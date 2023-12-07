@@ -7,6 +7,8 @@ import com.example.springdb.repo.BeneficiaryRepo;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class BeneficiaryService {
@@ -17,8 +19,9 @@ public class BeneficiaryService {
         return repo.save(beneficiary);
     }
 
-    public List<Beneficiary> findAll()
-    {
+    public List<Beneficiary> findAll(){
+        List<Beneficiary> data = repo.findAll();
+        System.out.println("Beneficiary:"+ data);
         return repo.findAll();
     }
 
@@ -48,6 +51,19 @@ public class BeneficiaryService {
         updateBeneficiary.setBeneficiaryBank(beneficiary.getBeneficiaryBank());
         updateBeneficiary.setBeneficiaryIFSC(beneficiary.getBeneficiaryIFSC());
         return repo.save(updateBeneficiary);
+    }
+
+    public boolean isValidBankAccNumber(String bankAccNo)
+    {
+        String regex ="^\\d{10}$";
+        Pattern p= Pattern.compile(regex);
+        if(bankAccNo == null){
+            return false;
+        }
+        Matcher m=p.matcher(bankAccNo);
+        if(m.matches())
+            return true;
+        return false;
     }
 
     public Optional<Beneficiary> findBeneficiaryById(Integer id) {
