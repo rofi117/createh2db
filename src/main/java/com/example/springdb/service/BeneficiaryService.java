@@ -1,9 +1,9 @@
 package com.example.springdb.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.example.springdb.model.Beneficiary;
 import com.example.springdb.repo.BeneficiaryRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,10 +11,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
+
 public class BeneficiaryService {
 
-    @Autowired
-    BeneficiaryRepo repo;
+     @Autowired
+     BeneficiaryRepo repo;
     public Beneficiary save(Beneficiary beneficiary) {
         return repo.save(beneficiary);
     }
@@ -34,13 +35,15 @@ public class BeneficiaryService {
     public boolean deleteBeneficiaryByID(Integer id)
     {
         repo.deleteById(id);
-        return true;
+           return true;
     }
 
     public boolean checkBeneficiaryExistById(Integer id)
     {
-        repo.existsById(id);
-        return true;
+        if(repo.existsById(id))
+           return true;
+        else
+            return false;
     }
 
     public Beneficiary updateBeneficiaryById(Beneficiary beneficiary, Integer id) {
@@ -50,6 +53,7 @@ public class BeneficiaryService {
         updateBeneficiary.setBeneficiaryAccNo(beneficiary.getBeneficiaryAccNo());
         updateBeneficiary.setBeneficiaryBank(beneficiary.getBeneficiaryBank());
         updateBeneficiary.setBeneficiaryIFSC(beneficiary.getBeneficiaryIFSC());
+
         return repo.save(updateBeneficiary);
     }
 
@@ -67,6 +71,9 @@ public class BeneficiaryService {
     }
 
     public Optional<Beneficiary> findBeneficiaryById(Integer id) {
+
         return repo.findById(id);
+
     }
 }
+

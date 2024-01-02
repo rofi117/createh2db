@@ -1,76 +1,83 @@
 package com.example.springdb.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.http.HttpStatusCode;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="beneficiary_table")
-
-@Getter
-@Setter
 public class Beneficiary  {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
+    @Column(name="Beneficiary_Name")
     private String beneficiaryName;
 
-    @Column
+    @Column(name="Beneficiary_AccountNumber",unique=true)
+    @NotEmpty
+    @Size(max=10)
     private String beneficiaryAccNo;
 
-    @Column
+    @Column(name="Beneficiary_Bank")
     private String beneficiaryBank;
 
-    @Column
+    @Column(name="Beneficiary_IFSC")
     private String beneficiaryIFSC;
 
-    public Beneficiary() {
-        super();
-    }
+//    public Beneficiary(int id, String beneficiaryName, String beneficiaryAccNo, String beneficiaryBank, String beneficiaryIFSC) {
+//        this.id = id;
+//        this.beneficiaryName = beneficiaryName;
+//        this.beneficiaryAccNo = beneficiaryAccNo;
+//        this.beneficiaryBank = beneficiaryBank;
+//        this.beneficiaryIFSC = beneficiaryIFSC;
+//    }
+//
+//    public Beneficiary() {
+//        super();
+//    }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getBeneficiaryName() {
-        return beneficiaryName;
-    }
-
-    public void setBeneficiaryName(String beneficiaryName) {
-        this.beneficiaryName = beneficiaryName;
-    }
-
-    public String getBeneficiaryAccNo() {
-        return beneficiaryAccNo;
-    }
-
-    public void setBeneficiaryAccNo(String beneficiaryAccNo) {
-        this.beneficiaryAccNo = beneficiaryAccNo;
-    }
-
-    public String getBeneficiaryBank() {
-        return beneficiaryBank;
-    }
-
-    public void setBeneficiaryBank(String beneficiaryBank) {
-        this.beneficiaryBank = beneficiaryBank;
-    }
-
-    public String getBeneficiaryIFSC() {
-        return beneficiaryIFSC;
-    }
-
-    public void setBeneficiaryIFSC(String beneficiaryIFSC) {
-        this.beneficiaryIFSC = beneficiaryIFSC;
-    }
+//    public int getId() {
+//        return id;
+//    }
+//
+//    public void setId(int id) {
+//        this.id = id;
+//    }
+//
+//    public String getBeneficiaryName() {
+//        return beneficiaryName;
+//    }
+//
+//    public void setBeneficiaryName(String beneficiaryName) {
+//        this.beneficiaryName = beneficiaryName;
+//    }
+//
+//    public String getBeneficiaryAccNo() {
+//        return beneficiaryAccNo;
+//    }
+//
+//    public void setBeneficiaryAccNo(String beneficiaryAccNo) {
+//        this.beneficiaryAccNo = beneficiaryAccNo;
+//    }
+//
+//    public String getBeneficiaryBank() {
+//        return beneficiaryBank;
+//    }
+//
+//    public void setBeneficiaryBank(String beneficiaryBank) {
+//        this.beneficiaryBank = beneficiaryBank;
+//    }
+//
+//    public String getBeneficiaryIFSC() {
+//        return beneficiaryIFSC;
+//    }
+//
+//    public void setBeneficiaryIFSC(String beneficiaryIFSC) {
+//        this.beneficiaryIFSC = beneficiaryIFSC;
+//    }
 }

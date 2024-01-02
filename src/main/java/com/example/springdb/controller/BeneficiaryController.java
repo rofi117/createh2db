@@ -1,56 +1,66 @@
 package com.example.springdb.controller;
 
-import com.sun.net.httpserver.Authenticator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import com.example.springdb.model.Beneficiary;
 import com.example.springdb.service.BeneficiaryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
+
+
 
 @RestController
+@CrossOrigin(origins="*")
+@RequestMapping("/api")
 public class BeneficiaryController {
 
     @Autowired
     BeneficiaryService service;
 
+
     @PostMapping("/addbeneficiary")
     public ResponseEntity<?> addBeneficiary(@RequestBody Beneficiary beneficiary) {
         System.out.println("AddBeneficiary");
         if (!service.isValidBankAccNumber(beneficiary.getBeneficiaryAccNo()))
-            return new ResponseEntity<String>("Enered Account number is not valid", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<String>("Entered Account number is not valid", HttpStatus.NOT_ACCEPTABLE);
         else {
             Beneficiary newbeneficiary = service.save(beneficiary);
-
             return new ResponseEntity<Beneficiary>(newbeneficiary, HttpStatus.CREATED);
         }
     }
 
-    @GetMapping("/beneficiary")
+    @GetMapping("/getAllbeneficiary")
     public List<Beneficiary> getAllBeneficiary() {
         return service.findAll();
     }
 
     @DeleteMapping("/deleteallBeneficiary")
-    public String deleteBeneficiary() {
-        return service.deleteAll();
-    }
-
-    @DeleteMapping("/delete_benefciary_by_id{id}")
-    public ResponseEntity<String> deleteBeneficiaryByID(@PathVariable("id") Integer id) {
-        boolean isBeneficiaryExist = service.checkBeneficiaryExistById(id);
-        if (!isBeneficiaryExist)
-            return new ResponseEntity<String>("Beneficiary id=" + id + "is not exist", HttpStatus.NOT_FOUND);
+    public ResponseEntity<String> deleteBeneficiary() {
+        String emptymessage = "Beneficiary Data already deleted, List is empty";
+        List<Beneficiary> beneficiaryList=service.findAll();
+        if(beneficiaryList.isEmpty()) {
+             return new ResponseEntity<String>(emptymessage,HttpStatus.NO_CONTENT);
+        }
         else {
-            service.deleteBeneficiaryByID(id);
+            String result = service.deleteAll();
+            return new ResponseEntity<String>(result, HttpStatus.OK);
         }
 
-        return new ResponseEntity<String>("Beneficiary id = " + id + " is successfully deleted", HttpStatus.OK);
+
+
+    }
+
+    @DeleteMapping("/delete-beneficiary-By-id/{id}")
+    public ResponseEntity<String> deleteBeneficiaryById(@PathVariable("id") Integer id){
+        if(!service.checkBeneficiaryExistById(id)){
+            return new ResponseEntity<String>("Beneficiary id = " + id + " is not exist", HttpStatus.NOT_FOUND);}
+        else{
+              service.deleteBeneficiaryByID(id);
+              return new ResponseEntity<String>("Beneficiary id = " + id + " is successfully deleted", HttpStatus.OK);
+          }
 
     }
 
