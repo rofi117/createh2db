@@ -9,8 +9,7 @@ This is a simple CRUD (Create, Read, Update, Delete) operation project built usi
 3. [Features](#features)
 4. [Setup](#setup)
 5. [Usage](#usage)
-6. [Contributing](#contributing)
-7. [License](#license)
+
 
 ## Introduction
 
