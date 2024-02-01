@@ -31,15 +31,14 @@ This project demonstrates basic CRUD operations using Spring Boot, including cre
 - Delete: Remove entries from the database.
 
 ## Setup
-1. Clone the repository:
 
-## Usage
-
-  - Access the CRUD operations via REST endpoints.
-  - Use tools like cURL, Postman, or your web browser to interact with the endpoints.
-
-
-
+1. download the project
+2. Navigate to the project directory
+     cd your-project
+3. Build the project using Maven
+      mvn clean install
+4. Run the project
+      java -jar target/your-project.jar
 
 ## Usage
 
