@@ -20,8 +20,12 @@ This project demonstrates basic CRUD operations using Spring Boot, including cre
 - Spring Boot
 - Spring Data JPA  
 - H2 Database 
-- Maven (or Gradle)
+- Maven 
 - Junit & Mockito
+- HTML
+- CSS
+- Javascript
+
 
 ## Features
 
