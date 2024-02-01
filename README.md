@@ -31,7 +31,6 @@ This project demonstrates basic CRUD operations using Spring Boot, including cre
 - Delete: Remove entries from the database.
 
 ## Setup
-
 1. Clone the repository:
 
 ```bash
