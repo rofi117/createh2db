@@ -7,8 +7,8 @@ This is a simple CRUD (Create, Read, Update, Delete) operation project built usi
 1. [Introduction](#introduction)
 2. [Technologies Used](#technologies-used)
 3. [Features](#features)
-4. [Setup](#setup)
-5. [Usage](#usage)
+4. [Usage](#usage)
+5. [Setup](#setup)
 
 
 ## Introduction
@@ -30,20 +30,22 @@ This project demonstrates basic CRUD operations using Spring Boot, including cre
 - Update: Modify existing data in the database.
 - Delete: Remove entries from the database.
 
+ ## Usage
+
+  - Access the CRUD operations via REST endpoints.
+  - Use Postman, or your swagger web browser to interact with the endpoints.
+
 ## Setup
 
 1. download the project
 2. Navigate to the project directory
- `bash
+ ``bash
      cd your-project
 4. Build the project using Maven
       mvn clean install
 5. Run the project
       java -jar target/your-project.jar
 
-## Usage
 
-  - Access the CRUD operations via REST endpoints.
-  - Use Postman, or your swagger web browser to interact with the endpoints.
 
          
