@@ -36,6 +36,14 @@ This project demonstrates basic CRUD operations using Spring Boot, including cre
 ```bash
 git clone https://github.com/your-username/your-project.git
 
+## Setup
+1. Clone the repository:
+
+```bash
+git clone https://github.com/your-username/your-project.git
+
+
+
 ## Usage
 
   - Access the CRUD operations via REST endpoints.
