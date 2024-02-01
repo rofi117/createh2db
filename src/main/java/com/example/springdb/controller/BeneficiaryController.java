@@ -1,5 +1,8 @@
 package com.example.springdb.controller;
 
+import com.example.springdb.error.AccountNumberNotValidException;
+import com.example.springdb.error.BeneficiaryNoContentException;
+import com.example.springdb.error.BeneficiaryNotFoundException;
 import com.example.springdb.model.Beneficiary;
 import com.example.springdb.service.BeneficiaryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +25,10 @@ public class BeneficiaryController {
 
 
     @PostMapping("/addbeneficiary")
-    public ResponseEntity<?> addBeneficiary(@RequestBody Beneficiary beneficiary) {
+    public ResponseEntity<Beneficiary> addBeneficiary(@RequestBody Beneficiary beneficiary) {
         System.out.println("AddBeneficiary");
         if (!service.isValidBankAccNumber(beneficiary.getBeneficiaryAccNo()))
-            return new ResponseEntity<String>("Entered Account number is not valid", HttpStatus.NOT_ACCEPTABLE);
+           throw new AccountNumberNotValidException("Entered Account number is not valid");
         else {
             Beneficiary newbeneficiary = service.save(beneficiary);
             return new ResponseEntity<Beneficiary>(newbeneficiary, HttpStatus.CREATED);
@@ -39,10 +42,9 @@ public class BeneficiaryController {
 
     @DeleteMapping("/deleteallBeneficiary")
     public ResponseEntity<String> deleteBeneficiary() {
-        String emptymessage = "Beneficiary Data already deleted, List is empty";
         List<Beneficiary> beneficiaryList=service.findAll();
         if(beneficiaryList.isEmpty()) {
-             return new ResponseEntity<String>(emptymessage,HttpStatus.NO_CONTENT);
+             throw new BeneficiaryNoContentException("Beneficiary List is empty");
         }
         else {
             String result = service.deleteAll();
@@ -56,7 +58,8 @@ public class BeneficiaryController {
     @DeleteMapping("/delete-beneficiary-By-id/{id}")
     public ResponseEntity<String> deleteBeneficiaryById(@PathVariable("id") Integer id){
         if(!service.checkBeneficiaryExistById(id)){
-            return new ResponseEntity<String>("Beneficiary id = " + id + " is not exist", HttpStatus.NOT_FOUND);}
+               throw new BeneficiaryNotFoundException("Beneficiary id = " + id + " is not exist");
+            }
         else{
               service.deleteBeneficiaryByID(id);
               return new ResponseEntity<String>("Beneficiary id = " + id + " is successfully deleted", HttpStatus.OK);
@@ -66,29 +69,23 @@ public class BeneficiaryController {
 
     @PutMapping("/update-beneficiary/{id}")
     public ResponseEntity<Beneficiary> updateBeneficiary(@RequestBody Beneficiary beneficiary, @PathVariable("id") Integer id) {
-        Beneficiary updatedbeneficiary = service.updateBeneficiaryById(beneficiary, id);
-        return new ResponseEntity<Beneficiary>(updatedbeneficiary, HttpStatus.OK);
+        Optional<Beneficiary> updatedbeneficiary = service.updateBeneficiaryById(beneficiary, id);
+       if(!updatedbeneficiary.isEmpty())
+
+           return ResponseEntity.ok(updatedbeneficiary.get());
+       else
+           throw new BeneficiaryNotFoundException("Beneficiary id = " + id + " is not exist");
     }
 
     @GetMapping("/get-beneficiary-By-id/{id}")
-    public ResponseEntity<?> getBeneficiaryById(@PathVariable("id") Integer id) {
+    public ResponseEntity<Beneficiary> getBeneficiaryById(@PathVariable("id") Integer id) {
      Optional<Beneficiary> beneficiaryById = service.findBeneficiaryById(id);
 
      if(beneficiaryById.isEmpty())
-         return new ResponseEntity<String>("The given beneficiary id is not found",HttpStatus.NOT_FOUND);
+         throw new BeneficiaryNotFoundException("Beneficiary id = " + id + " is not exist");
 
      return new ResponseEntity<Beneficiary>(beneficiaryById.get(), HttpStatus.FOUND);
 
     }
-
-
-
-
-
-
-
-
-
-
 
 }

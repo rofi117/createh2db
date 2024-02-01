@@ -11,52 +11,55 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-
 public class BeneficiaryService {
 
-     @Autowired
-     BeneficiaryRepo repo;
+    @Autowired
+    BeneficiaryRepo repo;
+
     public Beneficiary save(Beneficiary beneficiary) {
         return repo.save(beneficiary);
     }
 
-    public List<Beneficiary> findAll(){
+    public List<Beneficiary> findAll() {
         List<Beneficiary> data = repo.findAll();
-        System.out.println("Beneficiary:"+ data);
+        System.out.println("Beneficiary:" + data);
         return repo.findAll();
     }
 
-    public String deleteAll()
-    {
+    public String deleteAll() {
         repo.deleteAll();
         return "All Beneficiary Records Deleted Successfully";
     }
 
-    public boolean deleteBeneficiaryByID(Integer id)
-    {
+    public boolean deleteBeneficiaryByID(Integer id) {
         repo.deleteById(id);
-           return true;
+        return true;
     }
 
-    public boolean checkBeneficiaryExistById(Integer id)
-    {
-        if(repo.existsById(id))
-           return true;
+    public boolean checkBeneficiaryExistById(Integer id) {
+        if (repo.existsById(id))
+            return true;
         else
             return false;
     }
 
-    public Beneficiary updateBeneficiaryById(Beneficiary beneficiary, Integer id) {
-        Beneficiary updateBeneficiary = new Beneficiary();
-        updateBeneficiary.setId(id);
-        updateBeneficiary.setBeneficiaryName(beneficiary.getBeneficiaryName());
-        updateBeneficiary.setBeneficiaryAccNo(beneficiary.getBeneficiaryAccNo());
-        updateBeneficiary.setBeneficiaryBank(beneficiary.getBeneficiaryBank());
-        updateBeneficiary.setBeneficiaryIFSC(beneficiary.getBeneficiaryIFSC());
+    public Optional<Beneficiary> updateBeneficiaryById(Beneficiary beneficiary, Integer id) {
 
-        return repo.save(updateBeneficiary);
-    }
+        Optional<Beneficiary> optionalBeneficiary = repo.findById(id);
+        if (optionalBeneficiary.isPresent()) {
+            Beneficiary existingBeneficiary = optionalBeneficiary.get();
+            existingBeneficiary.setBeneficiaryName(beneficiary.getBeneficiaryName());
+            existingBeneficiary.setBeneficiaryAccNo(beneficiary.getBeneficiaryAccNo());
+            existingBeneficiary.setBeneficiaryBank(beneficiary.getBeneficiaryBank());
+            existingBeneficiary.setBeneficiaryIFSC(beneficiary.getBeneficiaryIFSC());
 
+            return Optional.of(repo.save(existingBeneficiary));
+        } else {
+            return Optional.empty();
+        }
+
+
+}
     public boolean isValidBankAccNumber(String bankAccNo)
     {
         String regex ="^\\d{10}$";

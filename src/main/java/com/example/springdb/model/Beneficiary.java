@@ -6,8 +6,6 @@ import lombok.*;
 
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name="beneficiary_table")
 public class Beneficiary  {
 
@@ -16,6 +14,7 @@ public class Beneficiary  {
     private int id;
 
     @Column(name="Beneficiary_Name")
+    @NotEmpty
     private String beneficiaryName;
 
     @Column(name="Beneficiary_AccountNumber",unique=true)
@@ -24,9 +23,11 @@ public class Beneficiary  {
     private String beneficiaryAccNo;
 
     @Column(name="Beneficiary_Bank")
+    @NotEmpty
     private String beneficiaryBank;
 
     @Column(name="Beneficiary_IFSC")
+    @NotEmpty
     private String beneficiaryIFSC;
 
 //    public Beneficiary(int id, String beneficiaryName, String beneficiaryAccNo, String beneficiaryBank, String beneficiaryIFSC) {

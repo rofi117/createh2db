@@ -1,5 +1,8 @@
 package com.example.springdb.controller;
 
+import com.example.springdb.error.AccountNumberNotValidException;
+import com.example.springdb.error.BeneficiaryNoContentException;
+import com.example.springdb.error.BeneficiaryNotFoundException;
 import com.example.springdb.model.Beneficiary;
 import com.example.springdb.service.BeneficiaryService;
 import org.junit.jupiter.api.DisplayName;
@@ -31,16 +34,11 @@ public class ControllerTest {
     @InjectMocks
     private BeneficiaryController controller;
 
-
-
-
-
     @Test
     @DisplayName("Get all data")
     public void test_getAllBeneficiary() {
         when(service.findAll()).thenReturn(Stream.of(new Beneficiary(1, "Rohini", "23456", "HDFC", "HDB012"), new Beneficiary(2, "Vijay", "23456", "ICICI", "ICIC21"), new Beneficiary(3, "Rohi", "4567", "HDFC", "HDB23")).collect(Collectors.toList()));
         assertEquals(3,controller.getAllBeneficiary().size());
-
     }
 
     @Test
@@ -60,9 +58,11 @@ public class ControllerTest {
     public void test_DeleteBeneficiary_passEmptyList() {
         List<Beneficiary> beneficiary= Collections.emptyList();
         when(service.findAll()).thenReturn(beneficiary);
-        ResponseEntity<String> result = controller.deleteBeneficiary();
-        assertEquals(HttpStatus.NO_CONTENT, result.getStatusCode());
-        assertEquals("Beneficiary Data already deleted, List is empty", result.getBody());
+        try {
+            controller.deleteBeneficiary();
+        } catch (BeneficiaryNoContentException e) {
+            assertEquals("Beneficiary List is empty", e.getMessage());
+        }
     }
 
     @Test
@@ -80,17 +80,21 @@ public class ControllerTest {
         int id = 4;
         String ExpectedOutput="Beneficiary id = " + id + " is not exist";
         when(service.checkBeneficiaryExistById(id)).thenReturn(false);
-        ResponseEntity<String> result=controller.deleteBeneficiaryById(id);
-        assertEquals(ExpectedOutput,result.getBody());
+        try {
+            controller.deleteBeneficiaryById(id);;
+        } catch (BeneficiaryNotFoundException e) {
+            assertEquals(ExpectedOutput, e.getMessage());
+        }
+
     }
 
     @Test
     @DisplayName("Add Beneficiary with Valid AccNo")
     public void test_addValidBeneficiary_WithValidAccountNumber() {
-        Beneficiary beneficiary = new Beneficiary(1, "Rofi", "123456789", "HDFC", "HDB123");
+        Beneficiary beneficiary = new Beneficiary(1, "Rofi", "1234567890", "HDFC", "HDB123");
         when(service.isValidBankAccNumber(any())).thenReturn(true);
         when(service.save(beneficiary)).thenReturn(beneficiary);
-        ResponseEntity<?> result = controller.addBeneficiary(beneficiary);
+        ResponseEntity<Beneficiary> result = controller.addBeneficiary(beneficiary);
         assertEquals(beneficiary, result.getBody());
 
     }
@@ -98,9 +102,13 @@ public class ControllerTest {
     @DisplayName("unable to Add Beneficiary with Invalid AccNo")
     public void test_addValidBeneficiary_WithInvalidAccountNumber(){
         Beneficiary beneficiary = new Beneficiary(1, "Rofi", "123456789", "HDFC", "HDB123");
+        when(service.isValidBankAccNumber(any())).thenReturn(false);
         String expectedOutput="Entered Account number is not valid";
-        ResponseEntity<?> result=controller.addBeneficiary(beneficiary);
-        assertEquals(expectedOutput,result.getBody());
+        try {
+            controller.addBeneficiary(beneficiary);
+        } catch (AccountNumberNotValidException e) {
+            assertEquals(expectedOutput, e.getMessage());
+        }
 
     }
 
@@ -113,26 +121,20 @@ public class ControllerTest {
         assertEquals(beneficiary.get(), beneficiaryById.getBody());
         assertEquals(HttpStatus.FOUND,beneficiaryById.getStatusCode());
 
-
     }
-
 
     @Test
     @DisplayName("Test Get Beneficiary By ID When ID not Exist")
     public void test_GetBeneficiaryById_WhenIDNotExist(){
+        var id =1;
         Optional<Beneficiary> beneficiary = Optional.of(new Beneficiary());
-        when(service.findBeneficiaryById(1)).thenReturn(Optional.empty());
-        ResponseEntity<?> beneficiaryById = controller.getBeneficiaryById(1);
-        assertEquals("The given beneficiary id is not found", beneficiaryById.getBody());
-        assertEquals(HttpStatus.NOT_FOUND,beneficiaryById.getStatusCode());
+        when(service.findBeneficiaryById(id)).thenReturn(Optional.empty());
 
+        try {
+            controller.getBeneficiaryById(id);
+        } catch (BeneficiaryNotFoundException e) {
+            assertEquals("Beneficiary id = " + id + " is not exist", e.getMessage());
+        }
 
     }
-
-
-
-
-
-
-
 }
