@@ -37,7 +37,8 @@ This project demonstrates basic CRUD operations using Spring Boot, including cre
  ## Usage
 
   - Access the CRUD operations via REST endpoints.
-  - Use Postman, or your swagger web browser to interact with the endpoints.
+  - Simple Frontend is also designed to interact with backend.
+  - OR Use Postman, or your swagger web browser to interact with the endpoints.
 
 ## Setup
 
