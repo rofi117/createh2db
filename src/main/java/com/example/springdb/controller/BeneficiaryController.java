@@ -26,12 +26,11 @@ public class BeneficiaryController {
 
     @PostMapping("/addbeneficiary")
     public ResponseEntity<Beneficiary> addBeneficiary(@RequestBody Beneficiary beneficiary) {
-        System.out.println("AddBeneficiary");
-        if (!service.isValidBankAccNumber(beneficiary.getBeneficiaryAccNo()))
+         if (!service.isValidBankAccNumber(beneficiary.getBeneficiaryAccNo()))
            throw new AccountNumberNotValidException("Entered Account number is not valid");
         else {
             Beneficiary newbeneficiary = service.save(beneficiary);
-            return new ResponseEntity<Beneficiary>(newbeneficiary, HttpStatus.CREATED);
+            return new ResponseEntity<>(newbeneficiary, HttpStatus.CREATED);
         }
     }
 
@@ -48,11 +47,8 @@ public class BeneficiaryController {
         }
         else {
             String result = service.deleteAll();
-            return new ResponseEntity<String>(result, HttpStatus.OK);
+            return new ResponseEntity<>(result, HttpStatus.OK);
         }
-
-
-
     }
 
     @DeleteMapping("/delete-beneficiary-By-id/{id}")
@@ -62,7 +58,7 @@ public class BeneficiaryController {
             }
         else{
               service.deleteBeneficiaryByID(id);
-              return new ResponseEntity<String>("Beneficiary id = " + id + " is successfully deleted", HttpStatus.OK);
+              return new ResponseEntity<>("Beneficiary id = " + id + " is successfully deleted", HttpStatus.OK);
           }
 
     }
@@ -70,8 +66,7 @@ public class BeneficiaryController {
     @PutMapping("/update-beneficiary/{id}")
     public ResponseEntity<Beneficiary> updateBeneficiary(@RequestBody Beneficiary beneficiary, @PathVariable("id") Integer id) {
         Optional<Beneficiary> updatedbeneficiary = service.updateBeneficiaryById(beneficiary, id);
-       if(!updatedbeneficiary.isEmpty())
-
+       if(updatedbeneficiary.isPresent())
            return ResponseEntity.ok(updatedbeneficiary.get());
        else
            throw new BeneficiaryNotFoundException("Beneficiary id = " + id + " is not exist");
@@ -84,7 +79,7 @@ public class BeneficiaryController {
      if(beneficiaryById.isEmpty())
          throw new BeneficiaryNotFoundException("Beneficiary id = " + id + " is not exist");
 
-     return new ResponseEntity<Beneficiary>(beneficiaryById.get(), HttpStatus.FOUND);
+     return new ResponseEntity<>(beneficiaryById.get(), HttpStatus.FOUND);
 
     }
 
