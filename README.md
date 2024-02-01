@@ -34,10 +34,11 @@ This project demonstrates basic CRUD operations using Spring Boot, including cre
 
 1. download the project
 2. Navigate to the project directory
+ ```bash
      cd your-project
-3. Build the project using Maven
+4. Build the project using Maven
       mvn clean install
-4. Run the project
+5. Run the project
       java -jar target/your-project.jar
 
 ## Usage
