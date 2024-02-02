@@ -6,6 +6,8 @@ import lombok.*;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name="beneficiary_table")
 public class Beneficiary  {
 
